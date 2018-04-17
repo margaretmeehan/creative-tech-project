@@ -1,0 +1,38 @@
+{
+  "name": "news-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/armanrahman22/news-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/armanrahman22/news-bot/issues"
+  },
+  "homepage": "https://github.com/armanrahman22/news-bot#readme",
+  "dependencies": {
+    "botbuilder": "^4.0.0-m2.2",
+    "botbuilder-ai": "^4.0.0-m2.5",
+    "botbuilder-botbldr": "^0.1.6",
+    "botbuilder-prompts": "^4.0.0-m2.2",
+    "dotenv": "^5.0.1",
+    "es6-promise": "^4.2.4",
+    "fs": "0.0.1-security",
+    "fuzzyset.js": "0.0.4",
+    "isomorphic-fetch": "^2.2.1",
+    "moment": "^2.22.0",
+    "newsapi": "^2.2.2",
+    "request": "^2.81.0",
+    "restify": "^7.1.0",
+    "superagent": "^3.8.2",
+    "traverson": "^6.0.3",
+    "traverson-hal": "^6.0.0",
+    "tsv": "^0.2.0"
+  }
+}

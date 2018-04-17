@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  bot:
+    build:
+      context: bot
+    environment:
+      SANIC_WORKERS: 2
+    ports:
+      - 9999:8000
