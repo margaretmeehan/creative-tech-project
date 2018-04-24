@@ -7,13 +7,13 @@ const querystring = require('querystring');
 
 import {ServiceBot} from 'botbuilder-botbldr';
 import {getLuisResults, LuisResult} from './luis';
-import {getArtistInfo, Artist, getAllArtists} from './explore';
+import {getArtistInfo, Artist, getAllArtistsFromFile, getAllArtistsFromAPI} from './explore';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 require('dotenv').load();
 
-const helpMessage = MessageFactory.text(`
+export const helpMessage = MessageFactory.text(`
 You can: \n 
 Start by showing artwork by saying something like 'Show me paintings by Rothko'. \n
 Get details about the piece you're looking at: 'Tell me more about this painting'. \n
@@ -27,7 +27,8 @@ export interface MyUserState {
     registered: boolean;
 }
 
-export const all_artists: Artist[] = getAllArtists();
+// getAllArtistsFromAPI();
+export const ALL_ARTISTS: Artist[] = getAllArtistsFromFile();
 
 async function get_temp_key(convoState: MyConversationState) {
     var queryParams = {
@@ -54,20 +55,20 @@ bot.onRequest(async context => {
                         switch (luisResults.topScoringIntent.intent) {
                             case 'Explore_artist':
                                 if (luisResults.entities.length > 0){
-                                    await getArtistInfo(convoState, luisResults);
+                                    getArtistInfo(context, luisResults);
                                     break;
                                 } else {
                                     await context.sendActivity("Sorry I didn't recognize that!");
                                 }
                             case 'Explore_painting':
                                 if (luisResults.entities.length > 0){
-                                    await getArtistInfo(convoState, luisResults);
+                                    await getArtistInfo(context, luisResults);
                                     break;
                                 } else {
                                     await context.sendActivity("Sorry I didn't recognize that!");
                                 }
                             case 'Show':
-                                await getArtistInfo(convoState, luisResults);
+                                await getArtistInfo(context, luisResults);
                                 break;
                             default:
                                 await context.sendActivity(helpMessage);

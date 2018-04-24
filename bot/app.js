@@ -47,8 +47,9 @@ var explore_1 = require("./explore");
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 require('dotenv').load();
-var helpMessage = MessageFactory.text("\nYou can: \n \nStart by showing artwork by saying something like 'Show me paintings by Rothko'. \n\nGet details about the piece you're looking at: 'Tell me more about this painting'. \n\nGet details about the artist: 'Tell me about Rothko' or \"Who is Rothko\".");
-exports.all_artists = explore_1.getAllArtists();
+exports.helpMessage = MessageFactory.text("\nYou can: \n \nStart by showing artwork by saying something like 'Show me paintings by Rothko'. \n\nGet details about the piece you're looking at: 'Tell me more about this painting'. \n\nGet details about the artist: 'Tell me about Rothko' or \"Who is Rothko\".");
+// getAllArtistsFromAPI();
+exports.ALL_ARTISTS = explore_1.getAllArtistsFromFile();
 function get_temp_key(convoState) {
     return __awaiter(this, void 0, void 0, function () {
         var queryParams, artApiRequest, response, data;
@@ -83,93 +84,91 @@ bot.onRequest(function (context) { return __awaiter(_this, void 0, void 0, funct
                 _a = context.request.type;
                 switch (_a) {
                     case 'message': return [3 /*break*/, 1];
-                    case 'conversationUpdate': return [3 /*break*/, 22];
+                    case 'conversationUpdate': return [3 /*break*/, 21];
                 }
-                return [3 /*break*/, 31];
+                return [3 /*break*/, 30];
             case 1:
                 _b = userState.registered;
                 switch (_b) {
                     case true: return [3 /*break*/, 2];
                 }
-                return [3 /*break*/, 20];
+                return [3 /*break*/, 19];
             case 2: return [4 /*yield*/, luis_1.getLuisResults(context.request.text)];
             case 3:
                 luisResults = _e.sent();
-                if (!(luisResults !== null && luisResults.topScoringIntent !== undefined)) return [3 /*break*/, 17];
+                if (!(luisResults !== null && luisResults.topScoringIntent !== undefined)) return [3 /*break*/, 16];
                 _c = luisResults.topScoringIntent.intent;
                 switch (_c) {
                     case 'Explore_artist': return [3 /*break*/, 4];
-                    case 'Explore_painting': return [3 /*break*/, 8];
-                    case 'Show': return [3 /*break*/, 12];
+                    case 'Explore_painting': return [3 /*break*/, 7];
+                    case 'Show': return [3 /*break*/, 11];
                 }
-                return [3 /*break*/, 14];
+                return [3 /*break*/, 13];
             case 4:
-                if (!(luisResults.entities.length > 0)) return [3 /*break*/, 6];
-                return [4 /*yield*/, explore_1.getArtistInfo(convoState, luisResults)];
-            case 5:
+                if (!(luisResults.entities.length > 0)) return [3 /*break*/, 5];
+                explore_1.getArtistInfo(context, luisResults);
+                return [3 /*break*/, 15];
+            case 5: return [4 /*yield*/, context.sendActivity("Sorry I didn't recognize that!")];
+            case 6:
                 _e.sent();
-                return [3 /*break*/, 16];
-            case 6: return [4 /*yield*/, context.sendActivity("Sorry I didn't recognize that!")];
+                _e.label = 7;
             case 7:
-                _e.sent();
-                _e.label = 8;
+                if (!(luisResults.entities.length > 0)) return [3 /*break*/, 9];
+                return [4 /*yield*/, explore_1.getArtistInfo(context, luisResults)];
             case 8:
-                if (!(luisResults.entities.length > 0)) return [3 /*break*/, 10];
-                return [4 /*yield*/, explore_1.getArtistInfo(convoState, luisResults)];
-            case 9:
                 _e.sent();
-                return [3 /*break*/, 16];
-            case 10: return [4 /*yield*/, context.sendActivity("Sorry I didn't recognize that!")];
-            case 11:
+                return [3 /*break*/, 15];
+            case 9: return [4 /*yield*/, context.sendActivity("Sorry I didn't recognize that!")];
+            case 10:
                 _e.sent();
-                _e.label = 12;
-            case 12: return [4 /*yield*/, explore_1.getArtistInfo(convoState, luisResults)];
-            case 13:
+                _e.label = 11;
+            case 11: return [4 /*yield*/, explore_1.getArtistInfo(context, luisResults)];
+            case 12:
                 _e.sent();
-                return [3 /*break*/, 16];
-            case 14: return [4 /*yield*/, context.sendActivity(helpMessage)];
-            case 15:
+                return [3 /*break*/, 15];
+            case 13: return [4 /*yield*/, context.sendActivity(exports.helpMessage)];
+            case 14:
                 _e.sent();
-                return [3 /*break*/, 16];
-            case 16: return [3 /*break*/, 19];
-            case 17: return [4 /*yield*/, context.sendActivity(helpMessage)];
-            case 18:
+                return [3 /*break*/, 15];
+            case 15: return [3 /*break*/, 18];
+            case 16: return [4 /*yield*/, context.sendActivity(exports.helpMessage)];
+            case 17:
                 _e.sent();
-                _e.label = 19;
-            case 19: return [3 /*break*/, 22];
-            case 20: return [4 /*yield*/, context.sendActivity(helpMessage)];
+                _e.label = 18;
+            case 18: return [3 /*break*/, 21];
+            case 19: return [4 /*yield*/, context.sendActivity(exports.helpMessage)];
+            case 20:
+                _e.sent();
+                return [3 /*break*/, 21];
             case 21:
-                _e.sent();
-                return [3 /*break*/, 22];
-            case 22:
-                if (!(context.request.membersAdded !== undefined)) return [3 /*break*/, 30];
+                if (!(context.request.membersAdded !== undefined)) return [3 /*break*/, 29];
                 _i = 0, _d = context.request.membersAdded;
-                _e.label = 23;
-            case 23:
-                if (!(_i < _d.length)) return [3 /*break*/, 30];
+                _e.label = 22;
+            case 22:
+                if (!(_i < _d.length)) return [3 /*break*/, 29];
                 member = _d[_i];
-                if (!(member.id !== context.request.recipient.id)) return [3 /*break*/, 29];
+                if (!(member.id !== context.request.recipient.id)) return [3 /*break*/, 28];
                 return [4 /*yield*/, get_temp_key(convoState)];
+            case 23:
+                _e.sent();
+                if (!(userState.registered === undefined)) return [3 /*break*/, 26];
+                return [4 /*yield*/, context.sendActivity("Welcome to Art Bot!")];
             case 24:
                 _e.sent();
-                if (!(userState.registered === undefined)) return [3 /*break*/, 27];
-                return [4 /*yield*/, context.sendActivity("Welcome to Art Bot!")];
+                return [4 /*yield*/, context.sendActivity(exports.helpMessage)];
             case 25:
                 _e.sent();
-                return [4 /*yield*/, context.sendActivity(helpMessage)];
-            case 26:
-                _e.sent();
                 userState.registered = true;
-                return [3 /*break*/, 29];
-            case 27: return [4 /*yield*/, context.sendActivity("Welcome Back!")];
-            case 28:
+                return [3 /*break*/, 28];
+            case 26: return [4 /*yield*/, context.sendActivity("Welcome Back!")];
+            case 27:
                 _e.sent();
-                _e.label = 29;
-            case 29:
+                _e.label = 28;
+            case 28:
                 _i++;
-                return [3 /*break*/, 23];
-            case 30: return [3 /*break*/, 31];
-            case 31: return [2 /*return*/];
+                return [3 /*break*/, 22];
+            case 29: return [3 /*break*/, 30];
+            case 30: return [2 /*return*/];
         }
     });
 }); });

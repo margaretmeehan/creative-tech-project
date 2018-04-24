@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var app_1 = require("./app");
 var traverson = require('traverson');
 var JsonHalAdapter = require('traverson-hal');
 var FuzzySet = require('fuzzyset.js');
@@ -64,56 +65,89 @@ function getBestmatch(value) {
     return null;
 }
 exports.getBestmatch = getBestmatch;
-function getAllArtists() {
+function getAllArtistsFromFile() {
     var json_data = JSON.parse(fs.readFileSync('FamousArtists.json', 'utf8'));
     return json_data;
-    // const response = await fetch("https://www.wikiart.org/en/App/Artist/AlphabetJson?v=new&inPublicDomain=true");
-    // const data = await response.json();
-    // data.forEach(artist_json => {
-    //   let artist: Artist = {
-    //     wiki_url: artist_json.url,
-    //     wiki_artist_image: artist_json.image,
-    //     wiki_artist_wiki: artist_json.wikipediaUrl,
-    //     name: artist_json.artistName
-    //   }
-    //   let match = getBestmatch(artist.name);
-    //   if(match != null){
-    //     all_artists.push(artist);
-    //   }
-    // });
-    // var jsonData = JSON.stringify(all_artists);
-    // fs.writeFile("FamousArtists.json", jsonData, function(err) {
-    //   if (err) {
-    //       console.log(err);
-    //   }
-    // });
 }
-exports.getAllArtists = getAllArtists;
-function getArtistInfo(convoState, luis_result) {
+exports.getAllArtistsFromFile = getAllArtistsFromFile;
+function getAllArtistsFromAPI() {
     return __awaiter(this, void 0, void 0, function () {
-        var artist_name, api;
+        var response, data, all_artists, _i, all_artists_1, artist, url, response_1, data_1, jsonData;
         return __generator(this, function (_a) {
-            if (luis_result.entities.length && luis_result.entities[0].type == 'Artist') {
-                artist_name = luis_result.entities[0].entity;
-                traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
-                api = traverson.from('https://api.artsy.net/api').jsonHal();
-                api.newRequest()
-                    .follow('artists')
-                    .withRequestOptions({
-                    headers: {
-                        'X-Xapp-Token': convoState.temp_api_token,
-                        'Accept': 'application/vnd.artsy-v2+json'
-                    }
-                })
-                    .withTemplateParameters({ artworks: true, size: 1, term: artist_name })
-                    .getResource(function (error, artistResponse) {
-                    if (artistResponse._embedded.artists.length) {
-                        return artistResponse._embedded.artists[0];
-                    }
-                });
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch("https://www.wikiart.org/en/App/Artist/AlphabetJson?v=new&inPublicDomain=true")];
+                case 1:
+                    response = _a.sent();
+                    return [4 /*yield*/, response.json()];
+                case 2:
+                    data = _a.sent();
+                    all_artists = [];
+                    data.forEach(function (artist_json) {
+                        var artist = {
+                            wiki_artist_tag: artist_json.url,
+                            wiki_artist_image: artist_json.image,
+                            wiki_artist_wiki: artist_json.wikipediaUrl,
+                            name: artist_json.artistName,
+                            contentId: artist_json.contentId,
+                            birthDayAsString: artist_json.birthDayAsString,
+                            deathDayAsString: artist_json.deathDayAsString,
+                            biography: artist_json.biography,
+                            story: artist_json.story,
+                            relatedArtistsIds: artist_json.relatedArtistsIds
+                        };
+                        var match = getBestmatch(artist.name);
+                        if (match != null) {
+                            all_artists.push(artist);
+                        }
+                    });
+                    _i = 0, all_artists_1 = all_artists;
+                    _a.label = 3;
+                case 3:
+                    if (!(_i < all_artists_1.length)) return [3 /*break*/, 7];
+                    artist = all_artists_1[_i];
+                    url = "http://www.wikiart.org/en/" + artist.wiki_artist_tag + "?json=2";
+                    return [4 /*yield*/, fetch(url)];
+                case 4:
+                    response_1 = _a.sent();
+                    return [4 /*yield*/, response_1.json()];
+                case 5:
+                    data_1 = _a.sent();
+                    artist.biography = data_1.biography;
+                    artist.story = data_1.story;
+                    artist.relatedArtistsIds = data_1.relatedArtistsIds;
+                    _a.label = 6;
+                case 6:
+                    _i++;
+                    return [3 /*break*/, 3];
+                case 7:
+                    jsonData = JSON.stringify(all_artists);
+                    fs.writeFile("FamousArtists.json", jsonData, function (err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                    return [2 /*return*/];
             }
-            return [2 /*return*/, null];
         });
     });
+}
+exports.getAllArtistsFromAPI = getAllArtistsFromAPI;
+function getArtistInfo(context, luis_result) {
+    if (luis_result.entities.length && luis_result.entities[0].type == 'Artist') {
+        var name_1 = luis_result.entities[0].entity;
+        console.log(name_1);
+        if (name_1 != null) {
+            for (var _i = 0, ALL_ARTISTS_1 = app_1.ALL_ARTISTS; _i < ALL_ARTISTS_1.length; _i++) {
+                var artist = ALL_ARTISTS_1[_i];
+                console.log(artist.name + " = " + artist.name.search(new RegExp(name_1, 'i')));
+                if (artist.name.search(new RegExp(name_1, 'i')) != -1) {
+                    context.sendActivity(artist.biography);
+                }
+            }
+        }
+    }
+    else {
+        context.sendActivity(app_1.helpMessage);
+    }
 }
 exports.getArtistInfo = getArtistInfo;

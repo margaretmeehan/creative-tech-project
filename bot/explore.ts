@@ -1,5 +1,5 @@
-import { MyConversationState, MyUserState } from './app';
-import { StateContext } from 'botbuilder-botbldr';
+import {ALL_ARTISTS, MyConversationState, MyUserState, helpMessage} from './app';
+import {StateContext} from 'botbuilder-botbldr';
 import {LuisResult, getEntityOfType} from './luis';
 const traverson = require('traverson');
 const JsonHalAdapter = require('traverson-hal');
@@ -12,12 +12,20 @@ const ARTISTS: string[] = ['Pablo Picasso', 'Vincent van Gogh', 'Leonardo da Vin
           'Edvard Munch', 'Goya', 'Janet Fish', 'Edouard Manet'];
 const FUZZYFULLNAMES = FuzzySet(ARTISTS);
 
+
 export interface Artist {
-  wiki_url: string,
+  wiki_artist_tag: string,
   wiki_artist_image: string,
   wiki_artist_wiki: string,
-  name: string
+  name: string,
+  contentId: number,
+  birthDayAsString: string,
+  deathDayAsString: string,
+  biography: string,
+  story: string,
+  relatedArtistsIds: number[]
 }
+
 
 export interface Artwork {
   id: string,
@@ -50,6 +58,7 @@ export interface Artwork {
   image_versions: string[]
 }
 
+
 export function getBestmatch(value: string, ) : string {
   let matches: [number, string][] = FUZZYFULLNAMES.get(value);
   if(matches != null && matches.length > 0) {
@@ -69,54 +78,67 @@ export function getBestmatch(value: string, ) : string {
   return null;
 }
 
-export function getAllArtists(){
+
+export function getAllArtistsFromFile(){
   let json_data: Artist[] = JSON.parse(fs.readFileSync('FamousArtists.json', 'utf8'));
   return json_data;
-  // const response = await fetch("https://www.wikiart.org/en/App/Artist/AlphabetJson?v=new&inPublicDomain=true");
-  // const data = await response.json();
-  // data.forEach(artist_json => {
-  //   let artist: Artist = {
-  //     wiki_url: artist_json.url,
-  //     wiki_artist_image: artist_json.image,
-  //     wiki_artist_wiki: artist_json.wikipediaUrl,
-  //     name: artist_json.artistName
-  //   }
-  //   let match = getBestmatch(artist.name);
-  //   if(match != null){
-  //     all_artists.push(artist);
-  //   }
-  // });
-
-  // var jsonData = JSON.stringify(all_artists);
-  // fs.writeFile("FamousArtists.json", jsonData, function(err) {
-  //   if (err) {
-  //       console.log(err);
-  //   }
-  // });
 }
 
 
-export async function getArtistInfo(convoState: MyConversationState, luis_result: LuisResult): Promise<Artist> {
-  if(luis_result.entities.length && luis_result.entities[0].type == 'Artist'){
-    let artist_name = luis_result.entities[0].entity;
-    traverson.registerMediaType(JsonHalAdapter.mediaType, JsonHalAdapter);
-    let api = traverson.from('https://api.artsy.net/api').jsonHal();
-    api.newRequest()
-      .follow('artists')
-      .withRequestOptions({
-        headers: {
-          'X-Xapp-Token': convoState.temp_api_token,
-          'Accept': 'application/vnd.artsy-v2+json'
-        }
-      })
-      .withTemplateParameters({ artworks: true, size:1, term: artist_name })
-      .getResource(function(error, artistResponse) {
-        if(artistResponse._embedded.artists.length){
-          return <Artist>artistResponse._embedded.artists[0]; 
-        }
-      });
+export async function getAllArtistsFromAPI(){
+  let response = await fetch("https://www.wikiart.org/en/App/Artist/AlphabetJson?v=new&inPublicDomain=true");
+  let data = await response.json();
+  let all_artists: Artist[] = [];
+  data.forEach(artist_json => {
+    let artist: Artist = {
+      wiki_artist_tag: artist_json.url,
+      wiki_artist_image: artist_json.image,
+      wiki_artist_wiki: artist_json.wikipediaUrl,
+      name: artist_json.artistName,
+      contentId: artist_json.contentId,
+      birthDayAsString: artist_json.birthDayAsString,
+      deathDayAsString: artist_json.deathDayAsString,
+      biography: artist_json.biography,
+      story: artist_json.story,
+      relatedArtistsIds: artist_json.relatedArtistsIds
+    }
+    let match = getBestmatch(artist.name);
+    if(match != null){
+      all_artists.push(artist);
+    }
+  });
+
+  for(let artist of all_artists) {
+    let url = "http://www.wikiart.org/en/" + artist.wiki_artist_tag + "?json=2";
+    let response = await fetch(url);
+    let data = await response.json();
+    artist.biography = data.biography;
+    artist.story = data.story;
+    artist.relatedArtistsIds = data.relatedArtistsIds;
   }
-  return null;
-  
-  
+
+  let jsonData = JSON.stringify(all_artists);
+  fs.writeFile("FamousArtists.json", jsonData, function(err) {
+    if (err) {
+        console.log(err);
+    }
+  });
+}
+
+
+export function getArtistInfo(context: StateContext<MyConversationState, MyUserState>, luis_result: LuisResult) {
+  if(luis_result.entities.length && luis_result.entities[0].type == 'Artist'){
+    let name = luis_result.entities[0].entity;
+    console.log(name);
+    if(name != null) {
+      for(let artist of ALL_ARTISTS) {
+        console.log(artist.name + " = " + artist.name.search(new RegExp(name, 'i')));
+        if(artist.name.search(new RegExp(name, 'i')) != -1) {
+          context.sendActivity(artist.biography);
+        }
+      }
+    }
+  } else {
+    context.sendActivity(helpMessage);
+  }
 }
