@@ -1,8 +1,5 @@
-import {ALL_ARTISTS, MyConversationState, MyUserState, helpMessage} from './app';
-import {StateContext} from 'botbuilder-botbldr';
+import {ALL_ARTISTS, MyConversationState, MyContext, MyUserState, helpMessage} from './app';
 import {LuisResult, getEntityOfType} from './luis';
-const traverson = require('traverson');
-const JsonHalAdapter = require('traverson-hal');
 const FuzzySet = require('fuzzyset.js');
 var fs = require('fs');
 
@@ -28,38 +25,19 @@ export interface Artist {
 
 
 export interface Artwork {
-  id: string,
-  slug: string,
-  created_at: string,
-  updated_at: string,
   title: string,
-  category: string,
-  medium: string,
-  date: string,
-  dimensions: {
-    in: {
-      text: string,
-      height: number,
-      width: number,
-      depth: number,
-      diameter: number
-    },
-    cm: {
-      text: string,
-      height: number,
-      width: number,
-      depth: number,
-      diameter: number
-    }
-  },
-  exhibition_history: string,
-  collecting_institution: string,
-  image_rights: string,
-  image_versions: string[]
+  artistName: string,
+  artistContentId: number,
+  completitionYear: number,
+  yearAsString: string,
+  width: number,
+  height: number,
+  image: string,
+  contentId: number
 }
 
 
-export function getBestmatch(value: string, ) : string {
+export function getBestmatch(value: string) : string {
   let matches: [number, string][] = FUZZYFULLNAMES.get(value);
   if(matches != null && matches.length > 0) {
       let bestMatch: string;
@@ -126,7 +104,13 @@ export async function getAllArtistsFromAPI(){
 }
 
 
-export function getArtistInfo(context: StateContext<MyConversationState, MyUserState>, luis_result: LuisResult) {
+export async function getFamousPaintings(){
+  let artists = [];
+  for(let artist of ALL_ARTISTS) {
+  }
+}
+
+export function getArtistInfo(context: MyContext, luis_result: LuisResult) {
   if(luis_result.entities.length && luis_result.entities[0].type == 'Artist'){
     let name = luis_result.entities[0].entity;
     console.log(name);

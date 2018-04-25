@@ -36,8 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var app_1 = require("./app");
-var traverson = require('traverson');
-var JsonHalAdapter = require('traverson-hal');
 var FuzzySet = require('fuzzyset.js');
 var fs = require('fs');
 var ARTISTS = ['Pablo Picasso', 'Vincent van Gogh', 'Leonardo da Vinci', 'Claude Monet', 'Salvador Dali', 'Henri Matisse', 'Rembrandt',
@@ -132,13 +130,26 @@ function getAllArtistsFromAPI() {
     });
 }
 exports.getAllArtistsFromAPI = getAllArtistsFromAPI;
+function getFamousPaintings() {
+    return __awaiter(this, void 0, void 0, function () {
+        var artists, _i, ALL_ARTISTS_1, artist;
+        return __generator(this, function (_a) {
+            artists = [];
+            for (_i = 0, ALL_ARTISTS_1 = app_1.ALL_ARTISTS; _i < ALL_ARTISTS_1.length; _i++) {
+                artist = ALL_ARTISTS_1[_i];
+            }
+            return [2 /*return*/];
+        });
+    });
+}
+exports.getFamousPaintings = getFamousPaintings;
 function getArtistInfo(context, luis_result) {
     if (luis_result.entities.length && luis_result.entities[0].type == 'Artist') {
         var name_1 = luis_result.entities[0].entity;
         console.log(name_1);
         if (name_1 != null) {
-            for (var _i = 0, ALL_ARTISTS_1 = app_1.ALL_ARTISTS; _i < ALL_ARTISTS_1.length; _i++) {
-                var artist = ALL_ARTISTS_1[_i];
+            for (var _i = 0, ALL_ARTISTS_2 = app_1.ALL_ARTISTS; _i < ALL_ARTISTS_2.length; _i++) {
+                var artist = ALL_ARTISTS_2[_i];
                 console.log(artist.name + " = " + artist.name.search(new RegExp(name_1, 'i')));
                 if (artist.name.search(new RegExp(name_1, 'i')) != -1) {
                     context.sendActivity(artist.biography);

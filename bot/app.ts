@@ -1,11 +1,8 @@
-const { MemoryStorage, MessageFactory } = require('botbuilder');
-const superagent = require('superagent');
-const traverson = require('traverson');
-const JsonHalAdapter = require('traverson-hal');
+import {TurnContext} from 'botbuilder-core/lib';
+const { BotFrameworkAdapter, UserState, ConversationState, MemoryStorage, MessageFactory} = require('botbuilder');
 const querystring = require('querystring');
+const restify = require('restify');
 
-
-import {ServiceBot} from 'botbuilder-botbldr';
 import {getLuisResults, LuisResult} from './luis';
 import {getArtistInfo, Artist, getAllArtistsFromFile, getAllArtistsFromAPI} from './explore';
 
@@ -19,6 +16,21 @@ Start by showing artwork by saying something like 'Show me paintings by Rothko'.
 Get details about the piece you're looking at: 'Tell me more about this painting'. \n
 Get details about the artist: 'Tell me about Rothko' or "Who is Rothko".`);
 
+
+// getAllArtistsFromAPI();
+export const ALL_ARTISTS: Artist[] = getAllArtistsFromFile();
+
+// Create server
+let server = restify.createServer();
+server.listen(process.env.port || process.env.PORT || 3978, function () {
+    console.log(`${server.name} listening to ${server.url}`);
+});
+
+const adapter = new BotFrameworkAdapter({ 
+    appId: process.env.MICROSOFT_APP_ID, 
+    appPassword: process.env.MICROSOFT_APP_PASSWORD 
+});
+
 export interface MyConversationState {
     temp_api_token: string;
 }
@@ -27,76 +39,77 @@ export interface MyUserState {
     registered: boolean;
 }
 
-// getAllArtistsFromAPI();
-export const ALL_ARTISTS: Artist[] = getAllArtistsFromFile();
+export interface MyContext extends TurnContext {
+    // Added by UserState middleware.
+    readonly userState: MyUserState;
 
-async function get_temp_key(convoState: MyConversationState) {
-    var queryParams = {
-        "client_id": process.env.CLIENT_ID,
-        "client_secret": process.env.CLIENT_SECRET
-    }
-    let artApiRequest = process.env.API_URL + '?' + querystring.stringify(queryParams);
-    const response = await fetch(artApiRequest, {method: 'post'});
-    const data = await response.json();
-    convoState.temp_api_token = data.token;
+    // Added by ConversationState middleware.
+    readonly conversationState: MyConversationState;
 }
 
-const bot = new ServiceBot<MyConversationState, MyUserState>();
+// Add conversation state middleware
+const conversationStateMiddleware = new ConversationState(new MemoryStorage()); 
+adapter.use(conversationStateMiddleware);
 
-bot.onRequest(async context => {
-    const convoState = context.conversationState;
-    const userState = context.userState;
-    switch (context.request.type) {
-        case 'message' :
-            switch (userState.registered){
-                case true:
-                    const luisResults: LuisResult = await getLuisResults(context.request.text);
-                    if (luisResults !== null && luisResults.topScoringIntent !== undefined) {
-                        switch (luisResults.topScoringIntent.intent) {
-                            case 'Explore_artist':
-                                if (luisResults.entities.length > 0){
-                                    getArtistInfo(context, luisResults);
-                                    break;
-                                } else {
-                                    await context.sendActivity("Sorry I didn't recognize that!");
-                                }
-                            case 'Explore_painting':
-                                if (luisResults.entities.length > 0){
+const userStateMiddleware = new UserState(new MemoryStorage());
+adapter.use(userStateMiddleware);
+
+server.post('/api/messages', (req, res) => {
+    // Route received request to adapter for processing
+    adapter.processActivity(req, res, async (context: MyContext) => {
+        const convoState = conversationStateMiddleware.get(context);
+        const userState = userStateMiddleware.get(context);
+        switch (context.activity.type) {
+            case 'message' :
+                switch (userState.registered){
+                    case true:
+                        const luisResults: LuisResult = await getLuisResults(context.activity.text);
+                        if (luisResults !== null && luisResults.topScoringIntent !== undefined) {
+                            switch (luisResults.topScoringIntent.intent) {
+                                case 'Explore_artist':
+                                    if (luisResults.entities.length > 0){
+                                        getArtistInfo(context, luisResults);
+                                        break;
+                                    } else {
+                                        await context.sendActivity("Sorry I didn't recognize that!");
+                                    }
+                                case 'Explore_painting':
+                                    if (luisResults.entities.length > 0){
+                                        await getArtistInfo(context, luisResults);
+                                        break;
+                                    } else {
+                                        await context.sendActivity("Sorry I didn't recognize that!");
+                                    }
+                                case 'Show':
                                     await getArtistInfo(context, luisResults);
                                     break;
-                                } else {
-                                    await context.sendActivity("Sorry I didn't recognize that!");
-                                }
-                            case 'Show':
-                                await getArtistInfo(context, luisResults);
+                                default:
+                                    await context.sendActivity(helpMessage);
                                 break;
-                            default:
-                                await context.sendActivity(helpMessage);
-                            break;
-                        }
-                    } else {
-                        await context.sendActivity(helpMessage);
-                    }
-                    break;
-                default:
-                    await context.sendActivity(helpMessage);
-                    break;    
-            }
-        case 'conversationUpdate':
-            if (context.request.membersAdded !== undefined){
-                for (const member of context.request.membersAdded) {
-                    if (member.id !== context.request.recipient.id){
-                        await get_temp_key(convoState);
-                        if(userState.registered === undefined){
-                            await context.sendActivity("Welcome to Art Bot!");
-                            await context.sendActivity(helpMessage);
-                            userState.registered = true;
+                            }
                         } else {
-                            await context.sendActivity("Welcome Back!");
+                            await context.sendActivity(helpMessage);
+                        }
+                        break;
+                    default:
+                        await context.sendActivity(helpMessage);
+                        break;    
+                }
+            case 'conversationUpdate':
+                if (context.activity.membersAdded !== undefined){
+                    for (const member of context.activity.membersAdded) {
+                        if (member.id !== context.activity.recipient.id){
+                            if(userState.registered === undefined){
+                                await context.sendActivity("Welcome to Art Bot!");
+                                await context.sendActivity(helpMessage);
+                                userState.registered = true;
+                            } else {
+                                await context.sendActivity("Welcome Back!");
+                            }
                         }
                     }
                 }
-            }
-            break;   
-    }
+                break;   
+        }
+    });
 });
