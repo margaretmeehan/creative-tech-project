@@ -4,7 +4,8 @@ const querystring = require('querystring');
 const restify = require('restify');
 
 import {getLuisResults, LuisResult} from './luis';
-import {getArtistInfo, Artist, getAllArtistsFromFile, getAllArtistsFromAPI} from './explore';
+import {getArtistInfo, Artist, getAllArtistsFromFile, getAllArtistsFromAPI, Artwork, 
+        getAllPaintingsFromAPI, getFamousPaintingsFromFile} from './explore';
 
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
@@ -16,8 +17,9 @@ Start by showing artwork by saying something like 'Show me paintings by Rothko'.
 Get details about the piece you're looking at: 'Tell me more about this painting'. \n
 Get details about the artist: 'Tell me about Rothko' or "Who is Rothko".`);
 
-
+// getAllPaintingsFromAPI();
 // getAllArtistsFromAPI();
+export const ALL_PAINTINGS: Artwork[] = getFamousPaintingsFromFile();
 export const ALL_ARTISTS: Artist[] = getAllArtistsFromFile();
 
 // Create server

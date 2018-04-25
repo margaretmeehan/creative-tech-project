@@ -45,7 +45,9 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 require('dotenv').load();
 exports.helpMessage = MessageFactory.text("\nYou can: \n \nStart by showing artwork by saying something like 'Show me paintings by Rothko'. \n\nGet details about the piece you're looking at: 'Tell me more about this painting'. \n\nGet details about the artist: 'Tell me about Rothko' or \"Who is Rothko\".");
+// getAllPaintingsFromAPI();
 // getAllArtistsFromAPI();
+exports.ALL_PAINTINGS = explore_1.getFamousPaintingsFromFile();
 exports.ALL_ARTISTS = explore_1.getAllArtistsFromFile();
 // Create server
 var server = restify.createServer();
