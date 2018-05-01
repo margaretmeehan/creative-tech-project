@@ -1,6 +1,9 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
+        <UnityWSASolutionName>HoloBot</UnityWSASolutionName>
+        <UnityWSASolutionDir>C:\Users\phcherne\OneDrive - Microsoft\CreativeWeek\creative-tech-project\HoloBot\App\</UnityWSASolutionDir>
+        <UnityProjectDir>C:\Users\phcherne\OneDrive - Microsoft\CreativeWeek\creative-tech-project\HoloBot\</UnityProjectDir>
         <UnityWSAPlayerDir>C:\Program Files\Unity2017-2-2\Editor\Data\PlaybackEngines\MetroSupport\</UnityWSAPlayerDir>
-        <UnityWSAToolsDir>$(SolutionDir)Unity\Tools\</UnityWSAToolsDir>
+        <UnityWSAToolsDir>$(UnityWSASolutionDir)Unity\Tools\</UnityWSAToolsDir>
     </PropertyGroup>
 </Project>

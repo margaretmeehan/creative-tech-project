@@ -13,7 +13,7 @@ public class ScanManager : MonoBehaviour
     private Transform painting;
     private GameObject cam;
 
-    public GameObject test_paint;
+    //public GameObject test_paint;
 
     // Represents the hologram that is currently being gazed at.
     public GameObject FocusedObject { get; private set; }
@@ -37,7 +37,7 @@ public class ScanManager : MonoBehaviour
             SpatialUnderstanding.Instance.RequestFinishScan();
 
             bot.SetActive(true);
-            test_paint.SetActive(true);
+            //test_paint.SetActive(true);
             cam = GameObject.Find("MixedRealityCamera");
             cam.GetComponent<Camera>().nearClipPlane = 0.01f;
         };
@@ -113,8 +113,8 @@ public class ScanManager : MonoBehaviour
 
         SpatialUnderstandingDllTopology.TopologyResult[] _resultsTopology = new SpatialUnderstandingDllTopology.TopologyResult[QueryResultMaxCount];
 
-        var minHeightWallSpace = 0.2f;
-        var minWidthWallSpace = 0.2f;
+        var minHeightWallSpace = 1.2f;
+        var minWidthWallSpace = 1.2f;
 
         var resultsTopologyPtr = SpatialUnderstanding.Instance.UnderstandingDLL.PinObject(_resultsTopology);
         var locationCount = SpatialUnderstandingDllTopology.QueryTopology_FindPositionsOnWalls(minHeightWallSpace, minWidthWallSpace, 1.0f, 1.0f,_resultsTopology.Length, resultsTopologyPtr);
@@ -143,6 +143,7 @@ public class ScanManager : MonoBehaviour
 
                     ////Instantiate(this.PaintingPrefab, new Vector3(_resultsTopology[i].position.x, 0.7f, _resultsTopology[i].position.z), Quaternion.LookRotation(_resultsTopology[i].normal, new Vector3(0,0,90)));
                     painting = Instantiate(PaintingPrefab, new Vector3(_resultsTopology[i].position.x, 0.3f, _resultsTopology[i].position.z), Quaternion.LookRotation(_resultsTopology[i].normal, Vector3.up));
+                    //if (rand.Next(1, 100) % 2 == 0) painting.Rotate(0, 0, 90);
                     painting.name = string.Format("painting{0}", i);
                 }
             };

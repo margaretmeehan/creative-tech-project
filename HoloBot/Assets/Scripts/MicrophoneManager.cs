@@ -100,7 +100,7 @@ public class MicrophoneManager : MonoBehaviour, IFocusable
         // Use this string to cache the text currently displayed in the text box.
         textSoFar = new StringBuilder();
 
-        captionsManager.SetCaptionsText("");
+        captionsManager.SetCaptionsText("test TEST test TEST");
     }
 
     void Update()
@@ -134,6 +134,7 @@ public class MicrophoneManager : MonoBehaviour, IFocusable
 
     public void OnFocusExit()
     {
+        StopRecording();
         // Do nothing, let the user keep talking even if they look away
     }
 

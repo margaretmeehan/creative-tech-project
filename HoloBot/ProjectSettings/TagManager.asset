@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Speech
   - Stars
+  - Bot
   layers:
   - Default
   - TransparentFX

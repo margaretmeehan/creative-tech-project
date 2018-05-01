@@ -96,8 +96,8 @@ namespace HoloBot
         // From the Bot Connector portal, enable the Direct Line channel on your bot
         // Generate and copy your Direct Line secret (aka API key)
         // TO DO: Please use your own key. This one connects to The Maker Show Bot
-        // private string _APIKEY = "PN3lBLvTXwU.cwA.Kb8.qA6OkFZcgx2hLRSAlteqKnCZqYcQD_orUi_kwyw6i8k";
-        private string _APIKEY = "CJw50nR6e5A.cwA.XdM.hBDdg0G0p7AdK_jQllBpWAq78HYzHkv6FV-D6lUWo-Q";
+        private string _APIKEY = "PN3lBLvTXwU.cwA.Kb8.qA6OkFZcgx2hLRSAlteqKnCZqYcQD_orUi_kwyw6i8k";
+        //private string _APIKEY = "xCHlglWMQr8.cwA.Q4Q.u2C9-hfYdKe_g2uqugmgy-V4j57be3AYG7Yzz4enPcc";
         private string botToken;
         private string activeConversation;
         private string activeWatermark;
