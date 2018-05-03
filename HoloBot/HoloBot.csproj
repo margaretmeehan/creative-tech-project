@@ -802,6 +802,7 @@
     <Compile Include="Assets\Scripts\MicrophoneManager.cs" />
     <Compile Include="Assets\Scripts\MicrophoneManager2.cs" />
     <Compile Include="Assets\Scripts\MicrophoneManagerPaint.cs" />
+    <Compile Include="Assets\Scripts\PaintingData.cs" />
     <Compile Include="Assets\Scripts\PaintingManager.cs" />
     <Compile Include="Assets\Scripts\ScanManager.cs" />
     <Compile Include="Assets\Scripts\SceneDesignManager.cs" />

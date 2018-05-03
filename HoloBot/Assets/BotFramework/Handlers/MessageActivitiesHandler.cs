@@ -1,3 +1,4 @@
+using HoloToolkit.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,8 +7,24 @@ using UnityEngine;
 
 namespace Unity3dAzure.BotFramework {
   public class MessageActivitiesHandler : DataHandler {
-    // Web Socket JSON data handler
-    public override void OnData(byte[] rawData, string text, Boolean isBinary) {
+
+        GameObject[] paintings;
+
+        [Serializable]
+        public class BotMessage
+        {
+            public string intent;// { get; set; }
+            public string textResponse;// { get; set; }
+            public string jsonResponse;// { get; set; }
+        }
+
+        void Start()
+        {
+            paintings = GameObject.FindGameObjectsWithTag("Painting");
+        }
+        
+        // Web Socket JSON data handler
+        public override void OnData(byte[] rawData, string text, Boolean isBinary) {
 
       // ignore empty messages
       if (String.IsNullOrEmpty(text)) {
@@ -37,7 +54,25 @@ namespace Unity3dAzure.BotFramework {
       if (String.IsNullOrEmpty(message.inputHint)) {
         RaiseOnReceivedData(this, new BotMessageEventArgs(message.text, false));
       } else if (!String.IsNullOrEmpty(message.inputHint)) {
-        RaiseOnReceivedData(this, new BotMessageEventArgs(message.text, true));
+        BotMessage botMsg = JsonUtility.FromJson<BotMessage>(message.text); //ParseBotMessage(message.text);
+        switch (botMsg.intent){
+            case "Explore_artist":
+                RaiseOnReceivedData(this, new BotMessageEventArgs(botMsg.textResponse, true));
+                break;
+            case "Explore_painting":
+                RaiseOnReceivedData(this, new BotMessageEventArgs(botMsg.textResponse, true));
+                break;
+            case "Show":
+                PaintingData[] paintingDatas = JsonUtility.FromJson<PaintingData[]>(botMsg.jsonResponse);
+                for (int i = 0; i < paintings.Length; i++)
+                {
+                    paintings[i].GetComponentInChildren<SetPainting>().NewPainting(paintingDatas[i]);
+                }
+                RaiseOnReceivedData(this, new BotMessageEventArgs("Here are some more paintings", true));
+                break;
+            default:
+                break;
+        }
       } else {
         Debug.LogWarning("Unhandled message type: " + message.inputHint + " message: " + message.text);
       }
@@ -53,6 +88,19 @@ namespace Unity3dAzure.BotFramework {
         return null;
       }
     }
+
+    public static BotMessage ParseBotMessage(string json)
+        {
+            try
+            {
+                return JsonUtility.FromJson<BotMessage>(json);
+            }
+            catch (ArgumentException exception)
+            {
+                Debug.LogWarningFormat("Failed to parse bot message. Reason: {0} \n'{1}'", exception.Message, json);
+                return null;
+            }
+        }
 
     #endregion
   }

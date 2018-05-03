@@ -14659,7 +14659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InstructionTextMesh: {fileID: 27909832}
-  PaintingPrefab: {fileID: 4229558681948966, guid: fde473f768c6713479b33b048d4e5de7,
+  PaintingPrefab: {fileID: 4424819536246354, guid: fde473f768c6713479b33b048d4e5de7,
     type: 2}
   bot: {fileID: 1976171361}
 --- !u!1 &586316484
@@ -18533,7 +18533,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 921449246}
-  m_LocalRotation: {x: 0.512043, y: -0.50838566, z: 0.49205205, w: 0.48707384}
+  m_LocalRotation: {x: 0.51204294, y: -0.5083856, z: 0.492052, w: 0.48707378}
   m_LocalPosition: {x: 0.0004259331, y: -0.04986445, z: 0.012432733}
   m_LocalScale: {x: 0.3937008, y: 0.39370078, z: 0.39370075}
   m_Children: []
@@ -22108,62 +22108,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!1001 &1083276343
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4971908577972854, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 114149074421336240, guid: 51bf1db0a709ec84d828471ccc158696,
-        type: 2}
-      propertyPath: tmsBot
-      value: 
-      objectReference: {fileID: 228078682}
-    - target: {fileID: 114149074421336240, guid: 51bf1db0a709ec84d828471ccc158696,
-        type: 2}
-      propertyPath: selectedSource
-      value: 
-      objectReference: {fileID: 228078677}
-    - target: {fileID: 1357930141676094, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 51bf1db0a709ec84d828471ccc158696, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1196987148
 GameObject:
   m_ObjectHideFlags: 0
@@ -39838,6 +39782,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1976171362}
+  - component: {fileID: 1976171363}
   m_Layer: 0
   m_Name: BotCollection
   m_TagString: Untagged
@@ -39860,6 +39805,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1976171363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1976171361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5a0a60fbe897549ad0bfe2039f12b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HostTransform: {fileID: 0}
+  DistanceScale: 2
+  RotationMode: 0
+  PositionLerpSpeed: 0.2
+  RotationLerpSpeed: 0.2
+  IsDraggingEnabled: 1
 --- !u!1 &1988594589
 GameObject:
   m_ObjectHideFlags: 0
@@ -43319,7 +43281,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1992642563}
   - component: {fileID: 1992642564}
-  - component: {fileID: 1992642565}
   - component: {fileID: 1992642566}
   m_Layer: 0
   m_Name: HoloBot
@@ -43355,23 +43316,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 228078677}
   voice: 2
---- !u!114 &1992642565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1992642562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d5a0a60fbe897549ad0bfe2039f12b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HostTransform: {fileID: 0}
-  DistanceScale: 2
-  RotationMode: 0
-  PositionLerpSpeed: 0.2
-  RotationLerpSpeed: 0.2
-  IsDraggingEnabled: 1
 --- !u!114 &1992642566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43481,8 +43425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b3bc66b8926fa4eb5e244ce2439208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyTTS: {fileID: 1992642564}
-  selectedSource: {fileID: 228078677}
 --- !u!102 &2043096314
 TextMesh:
   serializedVersion: 3

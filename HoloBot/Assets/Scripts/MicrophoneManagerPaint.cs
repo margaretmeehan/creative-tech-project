@@ -50,7 +50,23 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
 #if WINDOWS_UWP
     void Start()
     {
-        
+
+        // Create a new DictationRecognizer and assign it to dictationRecognizer variable.
+        // Loop through Audio Sources on this gameobject to find the empty one
+        // that will be used for TTS playback
+        audioSources = GameObject.FindGameObjectWithTag("Bot").GetComponents<AudioSource>();
+        foreach (AudioSource a in audioSources)
+        {
+            if (a.clip == null)
+            {
+                ttsAudioSrc = a; // Used for TTS playback
+            }
+
+            if ((a.clip != null) && (a.clip.name == "Ping"))
+            {
+                selectedSource = a; // Used to play a ping sound when speech recording starts
+            }
+        }
     }
 
     async void Awake()
@@ -65,22 +81,6 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
 
         //animator = GetComponent<Animator>();
 
-        // Create a new DictationRecognizer and assign it to dictationRecognizer variable.
-        // Loop through Audio Sources on this gameobject to find the empty one
-        // that will be used for TTS playback
-        audioSources = this.GetComponents<AudioSource>();
-        foreach (AudioSource a in audioSources)
-        {
-            if (a.clip == null)
-            {
-                ttsAudioSrc = a; // Used for TTS playback
-            }
-
-            if ((a.clip != null) && (a.clip.name == "Ping"))
-            {
-                selectedSource = a; // Used to play a ping sound when speech recording starts
-            }
-        }
         // Query the maximum frequency of the default microphone. Use 'unused' to ignore the minimum frequency.
         //int unused;
         //Microphone.GetDeviceCaps(deviceName, out unused, out samplingRate);
@@ -188,7 +188,7 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
             //captionsManager.SetCaptionsText(text);
         //}, false); 
 
-        string msg = text;
+        string msg = text + " " + transform.parent.GetComponentInParent<PaintingData>().paintingContentId;
         string result = "I'm sorry, I'm not sure how to answer that";
 
         tmsBot.SendBotMessage(msg);
