@@ -20,6 +20,7 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
 
     private DictationRecognizer dictationRecognizer;
     private StringBuilder textSoFar;
+    public bool updateNeeded;
 
     // Use this string to cache the text currently displayed in the text box.
     //public Text captions;
@@ -93,7 +94,13 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
 
     void Update()
     {
-
+        if (updateNeeded)
+        {
+            int tempInt = GameObject.FindGameObjectWithTag("Bot").GetComponent<MicrophoneManager2>().currentPaintingID;
+            int thisTempInt = GetComponentInChildren<SetPainting>().paintData.paintingContentId;//transform.parent.GetComponentInParent<PaintingData>().paintingContentId;
+            GameObject.FindGameObjectWithTag("Bot").GetComponent<MicrophoneManager2>().currentPaintingID = thisTempInt;
+            updateNeeded = false;
+        }
     }
 
     /// <summary>
@@ -108,6 +115,7 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
             // is still in active playback mode
             if (!ttsAudioSrc.isPlaying)
             {
+                updateNeeded = true;
                 //captionsManager.ToggleKeywordRecognizer(false);
                 if (selectedSource != null)
                 {

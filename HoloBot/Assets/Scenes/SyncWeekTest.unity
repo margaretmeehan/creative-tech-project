@@ -161,7 +161,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 27909831}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -213,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c655338633f4544180b3d90a593ac17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TagalongDistance: 2
+  TagalongDistance: 4
   EnforceDistance: 1
   PositionUpdateSpeed: 9.8
   SmoothMotion: 1
@@ -7601,6 +7601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69f2a437cb875e46a28271aab09c759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  paintRenderer: {fileID: 0}
 --- !u!114 &228078679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7686,6 +7687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92b6a3a59c757424f910dd8d2769daf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentPaintingID: 0
   tmsBot: {fileID: 228078682}
   selectedSource: {fileID: 228078677}
 --- !u!1 &298075330
@@ -14662,6 +14664,8 @@ MonoBehaviour:
   PaintingPrefab: {fileID: 4424819536246354, guid: fde473f768c6713479b33b048d4e5de7,
     type: 2}
   bot: {fileID: 1976171361}
+  paintings: []
+  paintingDatas: []
 --- !u!1 &586316484
 GameObject:
   m_ObjectHideFlags: 0

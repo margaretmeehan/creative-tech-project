@@ -20,7 +20,8 @@ public class ScanManager : MonoBehaviour
 
     GestureRecognizer recognizer;
 
-    private List<Vector3> image_positions = new List<Vector3>();
+    public List<Transform> paintings = new List<Transform>();
+    public List<PaintingData> paintingDatas = new List<PaintingData>();
 
     // Use this for initialization
     void Start()
@@ -96,10 +97,10 @@ public class ScanManager : MonoBehaviour
 
     private bool CloseToOthers(Vector3 check_pos)
     {
-        if (image_positions.Count == 0) return false;
-        for (int i = 0; i < image_positions.Count; i++)
+        if (paintings.Count == 0) return false;
+        for (int i = 0; i < paintings.Count; i++)
         {
-            if (1.2f > Vector3.Distance(check_pos, image_positions[i]))
+            if (1.2f > Vector3.Distance(check_pos, paintings[i].position))
             {
                 return true;
             }
@@ -113,8 +114,8 @@ public class ScanManager : MonoBehaviour
 
         SpatialUnderstandingDllTopology.TopologyResult[] _resultsTopology = new SpatialUnderstandingDllTopology.TopologyResult[QueryResultMaxCount];
 
-        var minHeightWallSpace = 1.2f;
-        var minWidthWallSpace = 1.2f;
+        var minHeightWallSpace = 1.0f;
+        var minWidthWallSpace = 1.0f;
 
         var resultsTopologyPtr = SpatialUnderstanding.Instance.UnderstandingDLL.PinObject(_resultsTopology);
         var locationCount = SpatialUnderstandingDllTopology.QueryTopology_FindPositionsOnWalls(minHeightWallSpace, minWidthWallSpace, 1.0f, 1.0f,_resultsTopology.Length, resultsTopologyPtr);
@@ -130,7 +131,7 @@ public class ScanManager : MonoBehaviour
             {
                 if (!CloseToOthers(_resultsTopology[i].position))
                 {
-                    image_positions.Add(_resultsTopology[i].position);
+                    //image_positions.Add(_resultsTopology[i].position);
                     //if (rand.Next(1, 100) % 2 == 0)
                     //{
                     //    painting = Instantiate(PaintingPrefab, new Vector3(_resultsTopology[i].position.x, 0.3f, _resultsTopology[i].position.z), Quaternion.LookRotation(_resultsTopology[i].normal, Vector3.up));
@@ -145,6 +146,8 @@ public class ScanManager : MonoBehaviour
                     painting = Instantiate(PaintingPrefab, new Vector3(_resultsTopology[i].position.x, 0.3f, _resultsTopology[i].position.z), Quaternion.LookRotation(_resultsTopology[i].normal, Vector3.up));
                     //if (rand.Next(1, 100) % 2 == 0) painting.Rotate(0, 0, 90);
                     painting.name = string.Format("painting{0}", i);
+                    paintings.Add(painting);
+                    paintingDatas.Add(painting.GetComponent<PaintingData>());
                 }
             };
 

@@ -20,6 +20,7 @@ public class MicrophoneManager2 : MonoBehaviour, IFocusable
 
     public DictationRecognizer dictationRecognizer;
     private StringBuilder textSoFar;
+    public int currentPaintingID = 0;
 
     // Use this string to cache the text currently displayed in the text box.
     //public Text captions;
@@ -199,7 +200,7 @@ public class MicrophoneManager2 : MonoBehaviour, IFocusable
             //captionsManager.SetCaptionsText(text);
         //}, false); 
 
-        string msg = text;
+        string msg = text+ " " + currentPaintingID;
         string result = "I'm sorry, I'm not sure how to answer that";
 
         tmsBot.SendBotMessage(msg);

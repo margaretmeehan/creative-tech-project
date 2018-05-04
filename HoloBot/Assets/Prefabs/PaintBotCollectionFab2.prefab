@@ -403,7 +403,7 @@ MeshCollider:
   m_GameObject: {fileID: 1053772420460122}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Convex: 0
   m_InflateMesh: 0
@@ -431,7 +431,7 @@ BoxCollider:
   m_GameObject: {fileID: 1121102363009652}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -445,8 +445,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.09214466, y: 0.16034721, z: 0.1160775}
-  m_Center: {x: -8.772335e-16, y: 0.015432455, z: 0.041941524}
+  m_Size: {x: 1.33657, y: 0.08173055, z: 0.89629114}
+  m_Center: {x: 0.0031611917, y: 0.020669343, z: 0.036752377}
 --- !u!65 &65786564658918160
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -524,6 +524,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39b2e639faa2274448f6bd572d681022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  paintRenderer: {fileID: 0}
+  needsUpdate: 0
+  imUrl: 
+  paintData: {fileID: 0}
 --- !u!114 &114182101782711926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -535,6 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94445636aacc6cf498b3ca0c3b892142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  updateNeeded: 0
   tmsBot: {fileID: 0}
   selectedSource: {fileID: 0}
 --- !u!114 &114211241646497968
@@ -589,13 +594,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7bea83c9e8240348a14f53408d3b2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  artistName: 
-  artistContentId: 0
-  paintingContentId: 0
-  paintingTitle: 
-  paintingInfo: 
-  paintingDescription: 
-  paintingImageUrl: 
 --- !u!114 &114611519649648442
 MonoBehaviour:
   m_ObjectHideFlags: 1
