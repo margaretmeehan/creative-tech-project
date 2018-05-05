@@ -40,8 +40,8 @@ public class MicrophoneManager2 : MonoBehaviour, IFocusable
 
     // Audio sources, including the one used for TTS playback
     // SelectedSource is used to play the audible Ping sound when speech recording starts
-    private AudioSource[] audioSources;
-    private AudioSource ttsAudioSrc;
+    public AudioSource[] audioSources;
+    public AudioSource ttsAudioSrc;
     public AudioSource selectedSource;
 
     // Awake was made async so we can await the StartConversation Task
@@ -119,17 +119,15 @@ public class MicrophoneManager2 : MonoBehaviour, IFocusable
         {
             // Don't activate speech recognition if the speech synthesizer's audio source
             // is still in active playback mode
-            if (!ttsAudioSrc.isPlaying)
+            if (ttsAudioSrc.isPlaying) ttsAudioSrc.Stop();
+            //captionsManager.ToggleKeywordRecognizer(false);
+            if (selectedSource != null)
             {
-                //captionsManager.ToggleKeywordRecognizer(false);
-                if (selectedSource != null)
-                {
-                    selectedSource.Play();
-                }
-                //animator.Play("Idle");
-                //StartCoroutine(CoStartRecording());
-                StartRecording();
+                selectedSource.Play();
             }
+            //animator.Play("Idle");
+            //StartCoroutine(CoStartRecording());
+            StartRecording();
         }
     }
 

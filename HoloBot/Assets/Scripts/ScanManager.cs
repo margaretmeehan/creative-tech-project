@@ -26,6 +26,7 @@ public class ScanManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        this.InstructionTextMesh.text = "Start by scanning the room";
         SpatialUnderstanding.Instance.RequestBeginScanning();
         SpatialUnderstanding.Instance.ScanStateChanged += ScanStateChanged;
 
@@ -75,10 +76,10 @@ public class ScanManager : MonoBehaviour
                 this.LogSurfaceState();
                 break;
             case SpatialUnderstanding.ScanStates.Finishing:
-                this.InstructionTextMesh.text = "State: Finishing Scan";
+                this.InstructionTextMesh.text = "";//"State: Finishing Scan";
                 break;
             case SpatialUnderstanding.ScanStates.Done:
-                this.InstructionTextMesh.text = "State: Scan Finished";
+                this.InstructionTextMesh.text = "";//"State: Scan Finished";
                 break;
             default:
                 break;
@@ -91,7 +92,7 @@ public class ScanManager : MonoBehaviour
         if (SpatialUnderstandingDll.Imports.QueryPlayspaceStats(statsPtr) != 0)
         {
             var stats = SpatialUnderstanding.Instance.UnderstandingDLL.GetStaticPlayspaceStats();
-            this.InstructionTextMesh.text = string.Format("TotalSurfaceArea: {0:0.##}\nWallSurfaceArea: {1:0.##}\nHorizSurfaceArea: {2:0.##}", stats.TotalSurfaceArea, stats.WallSurfaceArea, stats.HorizSurfaceArea);
+            //this.InstructionTextMesh.text = string.Format("TotalSurfaceArea: {0:0.##}\nWallSurfaceArea: {1:0.##}\nHorizSurfaceArea: {2:0.##}", stats.TotalSurfaceArea, stats.WallSurfaceArea, stats.HorizSurfaceArea);
         }
     }
 

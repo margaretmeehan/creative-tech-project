@@ -12,12 +12,13 @@ namespace Unity3dAzure.BotFramework {
 
     void Start()
         {
-            //text = "Ask me something";
-            //needsUpdated = true;
             MyTTS = GameObject.FindGameObjectWithTag("Bot").GetComponentInParent<TextToSpeech>();
+            text = "Hi, welcome to ArtBot. You can start by asking me to show you paintings by an artist, like Picasso";
+            MyTTS.StartSpeaking(text);
+            needsUpdated = true;
         }
 
-    public override void OnReceivedData(object sender, EventArgs args) {
+        public override void OnReceivedData(object sender, EventArgs args) {
       if (args == null) {
         return;
       }

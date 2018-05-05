@@ -49,32 +49,45 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
     // a call inside the task.
     // Use regular Awake in non-UWP or else the Unity editor compiler will complain
 #if WINDOWS_UWP
-    void Start()
-    {
+    //void Start()
+    //{
 
-        // Create a new DictationRecognizer and assign it to dictationRecognizer variable.
-        // Loop through Audio Sources on this gameobject to find the empty one
-        // that will be used for TTS playback
-        audioSources = GameObject.FindGameObjectWithTag("Bot").GetComponents<AudioSource>();
-        foreach (AudioSource a in audioSources)
-        {
-            if (a.clip == null)
-            {
-                ttsAudioSrc = a; // Used for TTS playback
-            }
+    //    // Create a new DictationRecognizer and assign it to dictationRecognizer variable.
+    //    // Loop through Audio Sources on this gameobject to find the empty one
+    //    // that will be used for TTS playback
+    //    audioSources = GameObject.FindGameObjectWithTag("Bot").GetComponents<AudioSource>();
+    //    foreach (AudioSource a in audioSources)
+    //    {
+    //        if (a.clip == null)
+    //        {
+    //            ttsAudioSrc = a; // Used for TTS playback
+    //        }
 
-            if ((a.clip != null) && (a.clip.name == "Ping"))
-            {
-                selectedSource = a; // Used to play a ping sound when speech recording starts
-            }
-        }
-    }
+    //        if ((a.clip != null) && (a.clip.name == "Ping"))
+    //        {
+    //            selectedSource = a; // Used to play a ping sound when speech recording starts
+    //        }
+    //    }
+    //}
 
     async void Awake()
     {
-        dictationRecognizer = GameObject.FindGameObjectWithTag("Bot").GetComponent<MicrophoneManager2>().dictationRecognizer;
-        // Initialize the Bot Framework client before we can send requests in
-        //await tmsBot.StartConversation();
+    //    dictationRecognizer = GameObject.FindGameObjectWithTag("Bot").GetComponent<MicrophoneManager2>().dictationRecognizer;
+    //    audioSources = GameObject.FindGameObjectWithTag("Bot").GetComponents<AudioSource>();
+    //    foreach (AudioSource a in audioSources)
+    //    {
+    //        if (a.clip == null)
+    //        {
+    //            ttsAudioSrc = a; // Used for TTS playback
+    //        }
+
+    //        if ((a.clip != null) && (a.clip.name == "Ping"))
+    //        {
+    //            selectedSource = a; // Used to play a ping sound when speech recording starts
+    //        }
+    //    }
+    //    // Initialize the Bot Framework client before we can send requests in
+    //    //await tmsBot.StartConversation();
 #else
     void Awake()
     {
@@ -85,6 +98,22 @@ public class MicrophoneManagerPaint : MonoBehaviour, IFocusable
         // Query the maximum frequency of the default microphone. Use 'unused' to ignore the minimum frequency.
         //int unused;
         //Microphone.GetDeviceCaps(deviceName, out unused, out samplingRate);
+        //audioSources = GameObject.FindGameObjectWithTag("Bot").GetComponents<AudioSource>();
+        //foreach (AudioSource a in audioSources)
+        //{
+        //    if (a.clip == null)
+        //    {
+        //        ttsAudioSrc = a; // Used for TTS playback
+        //    }
+
+        //    if ((a.clip != null) && (a.clip.name == "Ping"))
+        //    {
+        //        selectedSource = a; // Used to play a ping sound when speech recording starts
+        //    }
+        //}
+        dictationRecognizer = GameObject.FindGameObjectWithTag("Bot").GetComponent<MicrophoneManager2>().dictationRecognizer;
+        ttsAudioSrc = GameObject.FindGameObjectWithTag("Bot").GetComponent<MicrophoneManager2>().ttsAudioSrc;
+        selectedSource = GameObject.FindGameObjectWithTag("Bot").GetComponent<MicrophoneManager2>().selectedSource;
 
         // Use this string to cache the text currently displayed in the text box.
         textSoFar = new StringBuilder();

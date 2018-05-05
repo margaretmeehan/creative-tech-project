@@ -148,7 +148,7 @@ TextMesh:
   m_Anchor: 0
   m_Alignment: 0
   m_TabSize: 4
-  m_FontSize: 30
+  m_FontSize: 25
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
@@ -18537,7 +18537,7 @@ Transform:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 921449246}
-  m_LocalRotation: {x: 0.51204294, y: -0.5083856, z: 0.492052, w: 0.48707378}
+  m_LocalRotation: {x: 0.512043, y: -0.50838566, z: 0.49205205, w: 0.48707384}
   m_LocalPosition: {x: 0.0004259331, y: -0.04986445, z: 0.012432733}
   m_LocalScale: {x: 0.3937008, y: 0.39370078, z: 0.39370075}
   m_Children: []
@@ -43374,9 +43374,9 @@ RectTransform:
   m_Father: {fileID: 1656220365}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 3, y: 372}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 550, y: 100}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2043096311
