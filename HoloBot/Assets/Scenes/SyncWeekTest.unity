@@ -7689,6 +7689,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPaintingID: 0
   tmsBot: {fileID: 228078682}
+  audioSources: []
+  ttsAudioSrc: {fileID: 0}
   selectedSource: {fileID: 228078677}
 --- !u!1 &298075330
 GameObject:

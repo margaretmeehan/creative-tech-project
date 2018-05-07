@@ -67,12 +67,12 @@ public class SetPainting : MonoBehaviour
 
             // assign texture
             paintRenderer.material.mainTexture = www.texture;
-            if(www.texture.width > www.texture.height && transform.localScale.x < transform.localScale.y)
+            if(www.texture.width > www.texture.height && transform.parent.localScale.x > transform.parent.localScale.z)
             {
-                transform.parent.GetComponentInParent<Transform>().localScale += new Vector3(-0.3f, 0.6f, 0f);
+                transform.parent.GetComponentInParent<Transform>().localScale += new Vector3(-0.4f, 0f, 0.6f);
             }
-            else if(www.texture.width < www.texture.height && transform.localScale.x > transform.localScale.y) {
-                transform.parent.GetComponentInParent<Transform>().localScale += new Vector3(0.3f, -0.6f, 0f);
+            else if(www.texture.width < www.texture.height && transform.parent.localScale.x < transform.parent.localScale.z) {
+                transform.parent.GetComponentInParent<Transform>().localScale += new Vector3(0.4f, 0f, -0.6f);
             }
         }
     }
